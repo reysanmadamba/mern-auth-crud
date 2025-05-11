@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User.js')
 const bcrypt = require('bcryptjs')
-const jwt = require('jwtwebtoken')
+const jwt = require('jsonwebtoken')
 
 router.post('/register', async (req, res) => {
     try {
@@ -10,7 +10,7 @@ router.post('/register', async (req, res) => {
 
 
 
-        const existingUser = await User, findOne({ email });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'Email already in user' });
         }
@@ -34,45 +34,74 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('./login', async (req, res) => {
+router.post('/login', async (req, res) => {
 
     try {
         const { email, password } = req.body;
 
-        const user = await User, findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'User not found' })
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'User not found' })
+            return res.status(400).json({ message: 'Invalid password' })
         }
-   
 
 
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
 
-    const token = jwt.sign({id: user._id }, process.env.JWT_SECRET, {expiresIn: '1d'})
-
-    res.json({
-        token,
-        user: {
-            id: user_id,
-            username: user.username,
-            email: user.email
-        }
-    })
-}
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email
+            }
+        })
+    }
 
     catch (err) {
         res.status(400).json({ error: err.message })
 
     }
 
-
-
-
-
 })
 
-module.export = router;
+
+
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers.authorization
+
+    if (!authHeader || !authHeader.startWith('Bearer')) {
+        return res.status(401).json({ message: 'No token provided'})
+    }
+    
+    const token = authHeader.split(' ')[1];
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        req.user = decode;
+        next();
+    }
+    catch (er) {
+        return res.status(401).json({ message: 'Invalid Token'})
+    }
+}
+
+
+router.get('/profile', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        res.json(user)
+    }
+    catch (err) {
+        res.status(400).json({ message: 'Error retrieving profile' })
+    }
+})
+
+
+
+
+
+module.exports = router;
