@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from '../api/axiosInstance'
+import logout from './LogOutButton'
+import LogoutButton from "./LogOutButton";
 
 const Profile = () => {
     const [user, setUser] = useState(null)
@@ -16,6 +18,8 @@ const Profile = () => {
         <div>
             <h2>Welcome, {user.username}</h2>
             <p>Email: {user.email}</p>
+
+            <LogoutButton />
         </div>
     )
 
