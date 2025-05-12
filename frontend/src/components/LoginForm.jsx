@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from '../api/axiosInstance';
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -14,8 +16,10 @@ const LoginForm = () => {
             localStorage.setItem('token', res.data.token)
 
             alert('Login successful');
+            navigate('/profile');
         }
         catch (err) {
+            console.error(err.response?.data)
             alert(err.response?.data?.message || 'Login failed')
 
         }
@@ -33,7 +37,7 @@ const LoginForm = () => {
 
             <input
             type="password"
-            value="{password}"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="password" required
          
