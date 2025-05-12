@@ -71,17 +71,25 @@ router.post('/login', async (req, res) => {
 
 
 
+//for test
+// router.get('/test', (req, res) => {
+//     res.status(200).json({ message: 'Test route working!' });
+// });
+
+
+
+
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization
 
-    if (!authHeader || !authHeader.startWith('Bearer')) {
+    if (!authHeader || !authHeader.startsWith('Bearer')) {
         return res.status(401).json({ message: 'No token provided'})
     }
     
     const token = authHeader.split(' ')[1];
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        req.user = decode;
+        req.user = decoded;
         next();
     }
     catch (er) {
