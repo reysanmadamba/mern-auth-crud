@@ -44,6 +44,7 @@ const LoginForm = () => {
             />
 
             <button type="submit">Login</button>
+            <button type="submit" onClick={() => navigate('/register')}>Don't have account? Register</button>
 
 
 

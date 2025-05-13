@@ -3,11 +3,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import Profile from './components/Profile'
 import PrivateRoute from './components/PrivateRoute'
+import RegisterForm from './components/RegisterForm';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/register" element={<RegisterForm />}/>
         <Route path="/login" element={<LoginForm />} />
 
         <Route element={<PrivateRoute />}>
