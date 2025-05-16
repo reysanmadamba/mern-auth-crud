@@ -4,12 +4,10 @@ const User = require('../models/User.js')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+
 router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        
-
-
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'Someone own this email already!' });

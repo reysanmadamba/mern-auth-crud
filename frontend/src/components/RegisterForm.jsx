@@ -17,13 +17,14 @@ const RegisterForm = () => {
         e.preventDefault();
 
         try {
-            await axios.post('/register', { username, email, password })
+            await axios.post('/users/register', { username, email, password })
 
             alert("Registration successfull!")
             navigate('/login');
         }
 
         catch (error) {
+            // console.error("registration error", error)
             alert(error.response.data?.message || "Registration failed!")
         }
 

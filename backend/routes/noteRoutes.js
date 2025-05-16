@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
-const router = express.Router()
 const express = require('express')
+const router = express.Router()
 const Note = require('../models/Note')
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startWith('Bearer')) {
+    if (!authHeader || !authHeader.startsWith('Bearer')) {
         return res.status(401).json({ message: 'No token provided' })
     }
 
@@ -39,11 +39,42 @@ router.get('/', verifyToken, async (req, res) => {
         const notes = await Note.find({ userId: req.user.id })
         res.json(notes)
     } catch (err) {
+        console.error(err)
         res.status(500).json({ error: "failed fetching note" })
 
     }
 
 })
 
+router.put('/:id', verifyToken, async (req, res) => {
+    try {
+        const updatedNote = await Note.findOneAndUpdate({ _id: req.params.id, userId: req.user.id },
+            req.body, { new: true }
+        )
+        if (!updatedNote) 
+            return res.status(404).json({message: "Note not found"})
+            res.json(updatedNote)
+        
+    } catch (err) {
+        res.status(500).json({error: "Failed to update note"})
+    }
+})
+
+router.delete('/:id', verifyToken, async (req, res) => {
+
+    try {
+    const deletedNote = await Note.findOneAndDelete({_id: req.params.id, userId: req.user.id})
+
+    if (!deletedNote) return res.status(404).json({message: 'Note not found'})
+        res.json({message: "Note deleted"})
+
+    } catch (err) {
+        res.status(500).json({error: "Failed to delete note"})
+    }
+
+})
+
+
+module.exports = router;
 
 

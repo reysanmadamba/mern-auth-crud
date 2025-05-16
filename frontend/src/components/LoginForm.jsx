@@ -11,7 +11,7 @@ const LoginForm = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post('login', {email, password});
+            const res = await axios.post('users/login', {email, password});
 
             localStorage.setItem('token', res.data.token)
 

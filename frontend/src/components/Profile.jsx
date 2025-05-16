@@ -1,27 +1,60 @@
 import { useEffect, useState } from "react";
 import axios from '../api/axiosInstance'
-import logout from './LogOutButton'
 import LogoutButton from "./LogOutButton";
+import NoteList from "./NoteList";
+import NoteForm from "./NoteForm";
 
 const Profile = () => {
     const [user, setUser] = useState(null)
+    const [notes, setNotes] = useState([])
+    const [editingNote, setEditingNote] = useState(null);
 
     useEffect(() => {
-        axios.get('/profile')
-        .then(res => setUser(res.data))
-        .catch(err => console.error('Not authorized!', err))
-    }, []);
+        axios.get('/users/profile')
+            .then(res => {
+                console.log("profile data", res.data)
+                setUser(res.data)
+        fetchNotes();
+    })
+    .catch(err => console.error(err))
+}, []);
 
-    if (!user) return <p>Loading profile...</p>
+const fetchNotes = () => {
+    axios.get('/notes').then(res => setNotes(res.data))
+}
 
-    return (
-        <div>
-            <h2>Welcome, {user.username}</h2>
-            <p>Email: {user.email}</p>
+const handleCreateOrUpdate = (noteData) => {
+    if (editingNote) {
+        axios.put(`/notes/${editingNote.id}`, noteData).then(() => {
+            setEditingNote(null);
+            fetchNotes();
+        })
+    }
+    else {
+        axios.post('/notes', noteData).then(fetchNotes);
+    }
+}
 
-            <LogoutButton />
-        </div>
-    )
+const handleDelete = (id) => {
+    axios.delete(`/notes/${id}`).then(fetchNotes)
+}
+
+
+if (!user) return <p>Loading profile...</p>
+
+return (
+    <div>
+        <h2>Welcome, {user.username}</h2>
+        <p>Email: {user.email}</p>
+
+        <LogoutButton />
+
+        <h3>{editingNote ? 'Edit Note' : ' Create Note'}</h3>
+        <NoteForm onSubmit={handleCreateOrUpdate} existingNote={editingNote} />
+
+        <NoteList note={notes} onEdit={setEditingNote} onDelete={handleDelete} />
+    </div>
+)
 
 }
 
