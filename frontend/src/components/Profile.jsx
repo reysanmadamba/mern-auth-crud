@@ -3,6 +3,7 @@ import axios from '../api/axiosInstance'
 import LogoutButton from "./LogOutButton";
 import NoteList from "./NoteList";
 import NoteForm from "./NoteForm";
+import { Link } from 'react-router-dom'
 
 const Profile = () => {
     const [user, setUser] = useState(null)
@@ -25,7 +26,7 @@ const fetchNotes = () => {
 
 const handleCreateOrUpdate = (noteData) => {
     if (editingNote) {
-        axios.put(`/notes/${editingNote.id}`, noteData).then(() => {
+        axios.put(`/notes/${editingNote._id}`, noteData).then(() => {
             setEditingNote(null);
             fetchNotes();
         })
@@ -44,15 +45,18 @@ if (!user) return <p>Loading profile...</p>
 
 return (
     <div>
+         <Link to="/newsfeed"> Newsfeed</Link>
         <h2>Welcome, {user.username}</h2>
         <p>Email: {user.email}</p>
 
         <LogoutButton />
+        
 
         <h3>{editingNote ? 'Edit Note' : ' Create Note'}</h3>
         <NoteForm onSubmit={handleCreateOrUpdate} existingNote={editingNote} />
 
         <NoteList note={notes} onEdit={setEditingNote} onDelete={handleDelete} />
+       
     </div>
 )
 

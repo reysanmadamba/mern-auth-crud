@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const express = require('express')
 const router = express.Router()
 const Note = require('../models/Note')
+// const { verifyToken } = require('./userRoutes')
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -46,6 +47,24 @@ router.get('/', verifyToken, async (req, res) => {
 
 })
 
+
+router.get('/newsfeed', async (req, res) => {
+    try {
+        const notes = await Note.find()
+        .populate('userId', 'email username')
+        .sort({createdAt: -1})
+        res.json(notes);
+    }
+    catch (err) {
+        // console.error('Error fetching newsfeed note', err)
+        res.status(500).json({ error: 'Failed to fetch public notes'})
+    }
+
+
+})
+
+
+
 router.put('/:id', verifyToken, async (req, res) => {
     try {
         const updatedNote = await Note.findOneAndUpdate({ _id: req.params.id, userId: req.user.id },
@@ -73,6 +92,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
     }
 
 })
+
 
 
 module.exports = router;

@@ -24,7 +24,7 @@ const RegisterForm = () => {
         }
 
         catch (error) {
-            // console.error("registration error", error)
+            console.error("registration error", error)
             alert(error.response.data?.message || "Registration failed!")
         }
 

@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/User.js')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Note = require('../models/Note.js')
 
 
 router.post('/register', async (req, res) => {
@@ -24,13 +25,13 @@ router.post('/register', async (req, res) => {
         await newUser.save();
 
         res.status(201).json({ message: 'User registered successfully' })
-
     }
-
     catch (err) {
         res.status(500).json({ error: err.message })
     }
 })
+
+
 
 router.post('/login', async (req, res) => {
 
@@ -69,21 +70,13 @@ router.post('/login', async (req, res) => {
 
 
 
-//for test
-// router.get('/test', (req, res) => {
-//     res.status(200).json({ message: 'Test route working!' });
-// });
-
-
-
-
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer')) {
-        return res.status(401).json({ message: 'No token provided'})
+        return res.status(401).json({ message: 'No token provided' })
     }
-    
+
     const token = authHeader.split(' ')[1];
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -91,7 +84,7 @@ const verifyToken = (req, res, next) => {
         next();
     }
     catch (er) {
-        return res.status(401).json({ message: 'Invalid Token'})
+        return res.status(401).json({ message: 'Invalid Token' })
     }
 }
 
@@ -104,6 +97,30 @@ router.get('/profile', verifyToken, async (req, res) => {
     catch (err) {
         res.status(400).json({ message: 'Error retrieving profile' })
     }
+})
+
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password')
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' })
+        }
+
+        const notes = await Note.find({ userId: req.params.id }).sort({ createdAt: -1 })
+        res.json({
+            user: {
+                _id: user._id,
+                username: user.username,
+                email: user.email,
+            },
+            notes
+        })
+    }
+    catch (err) {
+        res.status(500).json({ Message: 'Server error' })
+    }
+
+
 })
 
 
