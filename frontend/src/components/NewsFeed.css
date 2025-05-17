@@ -1,0 +1,16 @@
+body {
+    margin: 2rem 0;
+}
+.my-account {
+    text-decoration: none;
+    color: rgb(51, 46, 45);
+    cursor: pointer;
+    background-color: rgb(194, 190, 190);
+    padding: .5rem;
+    border-radius: .5rem;
+}
+
+.my-account:hover {
+    background-color: rgb(51, 46, 45);
+    color: rgb(194, 190, 190);;
+}

@@ -1,0 +1,54 @@
+body {
+
+background-color: f9f9f9;
+
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* width: 70%; */
+    
+    
+}
+.form input {
+    /* width: 47%; */
+    margin-bottom: 1rem;
+    padding: .5rem;
+    background-color: bisque;
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.form textarea {
+    /* width: 50%; */
+    height: 10rem;
+    background-color: bisque;
+    border-radius: .5rem;
+    border: none;
+    /* padding: 3rem 0.2rem; */
+    margin-bottom: 0.5rem;
+    resize: none;
+}
+
+.form textarea:hover, 
+.form input:hover {
+    background-color: #f5c181;
+    color: #1c1e21;
+
+}
+
+.button {
+    width: 50%;
+    padding: .4rem;
+    border-radius: .3rem;
+    border: none;
+    background-color: cornflowerblue;
+    color: white;
+}
+
+.button:hover {
+    background-color: rgb(221, 206, 206);
+    color: cornflowerblue;
+}

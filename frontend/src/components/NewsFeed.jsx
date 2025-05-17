@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import LogoutButton from './LogOutButton'
+import './NewsFeed.css'
 
 const Newsfeed = () => {
     
@@ -43,7 +44,7 @@ const Newsfeed = () => {
     return (
        
         <div>
-            <Link to={'/profile'}> My account</Link> <br /> <br />
+            <Link to={'/profile'} class="my-account"> My account</Link> <br /> <br />
             <LogoutButton />
            
              {/* <button onClick={handleNewsFeedButton}>NewsFeed</button> */}
@@ -53,7 +54,7 @@ const Newsfeed = () => {
                     <h3>{note.title}</h3>
                     <p>{note.content}</p>
                     <small>
-                        Posted By:{' '}
+                        posted by:{' '}
                         {note.userId ? (
                              <Link to={`/users/${note.userId._id}`}>
                         {note.userId.username || note.userId?.email}

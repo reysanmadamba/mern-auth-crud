@@ -26,9 +26,9 @@ const UserProfile = () => {
 
     return (
         <div>
-            <Link to="/newsfeed"> Newsfeed</Link>
+            <Link to="/newsfeed" class="nav newsfeed"> Newsfeed</Link>
             <br />
-            <Link to="/profile">Profile</Link>
+            <Link to="/profile" class="nav profile">Profile</Link>
             <h2>{user.username}</h2>
             <p>Email: {user.email}</p>
 

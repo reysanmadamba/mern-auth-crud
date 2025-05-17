@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import './NoteForm.css'
 
 const NoteForm = ({onSubmit, existingNote}) => {
 
@@ -21,10 +22,10 @@ const NoteForm = ({onSubmit, existingNote}) => {
     } 
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} class="form">
             <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title"/>
             <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Type text"/>
-                <button type="submit">{existingNote ? 'Update' : 'Create'} Note </button>
+                <button class="button"type="submit">{existingNote ? 'Update' : 'Create'} Note </button>
 
         </form>
     )

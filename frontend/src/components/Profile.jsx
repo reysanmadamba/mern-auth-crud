@@ -4,6 +4,8 @@ import LogoutButton from "./LogOutButton";
 import NoteList from "./NoteList";
 import NoteForm from "./NoteForm";
 import { Link } from 'react-router-dom'
+import './Profile.css'
+
 
 const Profile = () => {
     const [user, setUser] = useState(null)
@@ -45,11 +47,15 @@ if (!user) return <p>Loading profile...</p>
 
 return (
     <div>
-         <Link to="/newsfeed"> Newsfeed</Link>
-        <h2>Welcome, {user.username}</h2>
-        <p>Email: {user.email}</p>
+        <div class="flex">
+         <Link to="/newsfeed" class="nav newsfeed"> Newsfeed</Link>
+         <LogoutButton />
+         </div>
 
-        <LogoutButton />
+        <h2>Welcome, <br />{user.username}</h2>
+        {/* <p>Email: {user.email}</p> */}
+
+       
         
 
         <h3>{editingNote ? 'Edit Note' : ' Create Note'}</h3>

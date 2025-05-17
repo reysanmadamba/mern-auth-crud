@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const Note = require('../models/Note.js')
 
 
+
 router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
